@@ -1,5 +1,7 @@
 package com.ejb;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.aad.msal4j.IAuthenticationResult;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
@@ -41,12 +43,18 @@ public class AuthCallbackServlet extends HttpServlet {
 
             String userInfo = userService.getUserInfo(result.accessToken());
 
-            request.getSession().setAttribute("remote user", "admin");
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            request.getSession().setAttribute("User Info", userInfo);
+            JsonNode jsonNode = objectMapper.readTree(userInfo);
+
+            UserProfile userProfile = new UserProfile();
+
+            userProfile.setName(jsonNode.get("name").asText());
+            userProfile.setSub(jsonNode.get("sub").asText());
+
+            request.getSession().setAttribute("userInfo", userProfile);
 
             response.sendRedirect(request.getContextPath() + "/index.jsp");
-
 
         } catch (Exception e) {
             throw new ServletException("Authentication failed", e);

@@ -2,8 +2,20 @@
 <html>
 <body>
 <h2>
-    <%=request.getSession().getAttribute("User Name") %>
-    <%=request.getSession().getAttribute("remote user") %>
+   Welcome
+
+   <%
+      UserProfile userProfile = (UserProfile) request.getSession().getAttribute("userInfo");
+      if(userProfile != null) {
+         out.println("</br>");
+         out.println("Name: " + userProfile.getName());
+         out.println("</br>");
+         out.println("Sub: " + userProfile.getSub());
+      }
+      else{
+         out.println("Error occurred!");
+      }
+   %>
 </h2>
 </body>
 </html>

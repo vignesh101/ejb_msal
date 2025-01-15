@@ -23,6 +23,7 @@ public class AuthenticationService {
 
         {
             add("User.Read");
+            add("openid");
             add("profile");
             add("email");
         }
